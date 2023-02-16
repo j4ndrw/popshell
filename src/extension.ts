@@ -28,6 +28,7 @@ import * as dbus_service from 'dbus_service';
 import * as scheduler from 'scheduler';
 
 import type { Entity } from 'ecs';
+// @ts-ignore
 import type { ExtEvent } from 'events';
 import { Rectangle } from 'rectangle';
 import type { Indicator } from 'panel_settings';
@@ -44,6 +45,7 @@ const Movement = movement.Movement;
 const GLib: GLib = imports.gi.GLib;
 
 const { Gio, Meta, St, Shell } = imports.gi;
+// @ts-ignore
 const { GlobalEvent, WindowEvent } = Events;
 const { cursor_rect, is_move_op } = Lib;
 const Main = imports.ui.main;
@@ -227,12 +229,14 @@ export class Ext extends Ecs.System<ExtEvent> {
 
         if (this.settings.int) {
             this.settings.int.connect('changed::gtk-theme', () => {
+// @ts-ignore
                 this.register(Events.global(GlobalEvent.GtkThemeChanged));
             });
         }
 
         if (this.settings.shell) {
             this.settings.shell.connect('changed::name', () => {
+// @ts-ignore
                 this.register(Events.global(GlobalEvent.GtkShellChanged));
             });
         }
@@ -469,6 +473,7 @@ export class Ext extends Ecs.System<ExtEvent> {
             }
 
             const new_s = GLib.timeout_add(GLib.PRIORITY_LOW, 500, () => {
+// @ts-ignore
                 this.register(Events.window_event(win, WindowEvent.Size));
                 this.size_requests.delete(win.meta)
                 return false
@@ -478,6 +483,7 @@ export class Ext extends Ecs.System<ExtEvent> {
         }
 
         this.connect_meta(win, 'workspace-changed', () => {
+// @ts-ignore
             this.register(Events.window_event(win, WindowEvent.Workspace));
         })
 
@@ -487,6 +493,7 @@ export class Ext extends Ecs.System<ExtEvent> {
             this.connect_size_signal(win, 'position-changed', size_event),
 
             this.connect_size_signal(win, 'notify::minimized', () => {
+// @ts-ignore
                 this.register(Events.window_event(win, WindowEvent.Minimize));
             }),
         ]);
@@ -937,6 +944,7 @@ export class Ext extends Ecs.System<ExtEvent> {
     on_tile_detach(win: Entity) {
         this.windows.with(win, (window) => {
             if (window.prev_rect && !window.ignore_detach) {
+// @ts-ignore
                 this.register(Events.window_move(this, window, window.prev_rect));
                 window.prev_rect = null;
             }
@@ -1241,6 +1249,7 @@ export class Ext extends Ecs.System<ExtEvent> {
                     win.meta.unmaximize(Meta.MaximizeFlags.BOTH);
                 }
 
+// @ts-ignore
                 this.register(Events.window_move(this, win, rect));
             } else {
                 win.move(this, rect, () => {});
@@ -1870,8 +1879,10 @@ export class Ext extends Ecs.System<ExtEvent> {
                 if (!win) return;
 
                 if (event === Meta.SizeChange.MAXIMIZE || event === Meta.SizeChange.UNMAXIMIZE) {
+// @ts-ignore
                     this.register(Events.window_event(win, WindowEvent.Maximize));
                 } else {
+// @ts-ignore
                     this.register(Events.window_event(win, WindowEvent.Fullscreen));
                 }
             }
@@ -1908,11 +1919,13 @@ export class Ext extends Ecs.System<ExtEvent> {
 
         if (this.settings.mutter) {
             this.connect(this.settings.mutter, 'changed::workspaces-only-on-primary', () => {
+// @ts-ignore
                 this.register(Events.global(GlobalEvent.MonitorsChanged));
             });
         }
 
         this.connect(layoutManager, 'monitors-changed', () => {
+// @ts-ignore
             this.register(Events.global(GlobalEvent.MonitorsChanged));
         });
 
@@ -1927,6 +1940,7 @@ export class Ext extends Ecs.System<ExtEvent> {
         });
 
         this.connect(overview, 'showing', () => {
+// @ts-ignore
             this.register(Events.global(GlobalEvent.OverviewShown));
         });
 
@@ -1935,6 +1949,7 @@ export class Ext extends Ecs.System<ExtEvent> {
             if (window) {
                 this.on_focused(window);
             }
+// @ts-ignore
             this.register(Events.global(GlobalEvent.OverviewHidden));
         });
 

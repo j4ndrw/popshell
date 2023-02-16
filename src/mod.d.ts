@@ -1,3 +1,4 @@
+// @ts-ignore
 declare const global: Global,
     imports: any,
     log: any,
